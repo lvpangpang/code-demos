@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Route } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
-import { http } from 'js-common-library'
+import { http, getStorage } from 'js-common-library'
 
 import App from './App'
 import AppLayout from './AppLayout'
@@ -16,23 +16,26 @@ function Index() {
   if (location.pathname === '/login') {
     return <Route exact path="/login" component={Login} />
   }
-
   const init = () => {}
 
   useEffect(async () => {
-    const data = await http.get(
-      'https://qa01web-gateway.lingxichuxing.com/saas/v1/user/current_user_permission'
-    )
-    setData(data.data || {})
+    try {
+      const data = await http.get(
+        'https://qa01web-gateway.lingxichuxing.com/saas/v1/user/current_user_permission'
+      )
+      setData(data || {})
+    } catch (err) {
+      setData({
+        id: 1,
+      })
+    }
   }, [])
 
   return (
     <App
       id={data.id}
       init={init}
-      isLogin={() => {
-        return false
-      }}
+      // isLogin={() => !!getStorage('skio-toekn')}
     >
       <AppLayout menuConfig={data?.menus}>
         <Router></Router>

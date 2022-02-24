@@ -1,12 +1,9 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
+import View from '@/layout/View'
 
 function Index() {
-  return (
-    <div>
-      首页
-    </div>
-  )
+  return <View>首页</View>
 }
 
 export default observer(Index)

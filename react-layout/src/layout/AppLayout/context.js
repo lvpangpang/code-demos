@@ -3,6 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { Menu } from 'antd'
 import { observer } from 'mobx-react-lite'
 import store from './store'
+import AppLayoutProvider from './layoutContext'
 
 const { SubMenu } = Menu
 const { Item } = Menu
@@ -28,7 +29,7 @@ function findParent(menuConfig, pathname, list) {
 
 export const TopNav = observer((props) => {
   const { menuConfig = [] } = props
-  const { topId, setTopId, setSideNavMenu } = store
+  const { topId, setTopId, setSideNavMenu, setMenuConfig } = store
   const { pathname } = useLocation()
 
   const topClick = (e) => {
@@ -50,6 +51,7 @@ export const TopNav = observer((props) => {
         item[0].key = item[0].id
         topClick(item[0])
       }
+      setMenuConfig(menuConfig)
     }
   }, [menuConfig])
 
@@ -121,7 +123,21 @@ export const SiderNav = observer(() => {
   )
 })
 
-export function Center(props) {
+export const Center = (props) => {
   const { children } = props
-  return <div>{children}</div>
+  const { menuConfig } = store
+  const { pathname } = useLocation()
+
+  const list = findParent(menuConfig, pathname)
+  const res = []
+  if (list) {
+    list.forEach((item) => {
+      res.push(item.title)
+    })
+  }
+  return (
+    <AppLayoutProvider value={{ descList: res }}>
+      <div className="content-center">{children}</div>
+    </AppLayoutProvider>
+  )
 }

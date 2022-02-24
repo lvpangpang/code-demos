@@ -9,6 +9,12 @@ class Store {
     this.topId = id
   }
 
+  menuConfig = []
+  setMenuConfig = (list) => {
+    this.menuConfig = list
+
+  }
+
   sideNavMenu = []
   setSideNavMenu = (list) => {
     this.sideNavMenu = list
@@ -18,7 +24,7 @@ class Store {
   setOpenIdList = (list) => {
     this.openIdList = list
   }
-  
+
   siderId
   setSiderId = (id) => {
     this.siderId = id
@@ -26,7 +32,6 @@ class Store {
   siderClick = (history, data) => {
     this.setSiderId(data.id)
     history.push(data?.path)
-
   }
 }
 
