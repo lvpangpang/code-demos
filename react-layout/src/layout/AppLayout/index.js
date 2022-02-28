@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import { TopNav, SiderNav, Center } from './context'
+import { TopNav, SiderNav, Center } from './components'
 import './index.less'
 
 function AppLayout(props) {

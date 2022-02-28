@@ -11,17 +11,18 @@ const Login = React.lazy(() => import('../pages/login'))
 
 function Index() {
   const [data, setData] = useState({})
+  const [base, setBase] = useState({})
   const { location } = useHistory()
 
+  // 直接访问登录页面
   if (location.pathname === '/login') {
     return <Route exact path="/login" component={Login} />
   }
-  const init = () => {}
 
-  useEffect(async () => {
+  const getPersion = async () => {
     try {
       const data = await http.get(
-        'https://qa01web-gateway.lingxichuxing.com/saas/v1/user/current_user_permission'
+        '/saas/v1/user/current_user_permission'
       )
       setData(data || {})
     } catch (err) {
@@ -29,13 +30,37 @@ function Index() {
         id: 1,
       })
     }
+  }
+
+  const getBase = async () => {
+    try {
+      const data = await http.get('/saas/v1/basic/dataTypes')
+      setBase(data || {})
+    } catch (err) {
+      setData({
+        id: 1,
+      })
+    }
+  }
+
+  const init = () => {
+    getPersion()
+    getBase()
+  }
+
+  useEffect(() => {
+    init()
   }, [])
 
   return (
     <App
       id={data.id}
-      init={init}
-      // isLogin={() => !!getStorage('skio-toekn')}
+      provider={{
+        selectTypes: base,
+        authTypes: data.permissions,
+      }}
+      // init={init}
+      isLogin={() => !!getStorage('skio-token')}
     >
       <AppLayout menuConfig={data?.menus}>
         <Router></Router>

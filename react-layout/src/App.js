@@ -1,5 +1,5 @@
 import { BrowserRouter } from 'react-router-dom'
-import { http } from 'js-common-library'
+import { http, getStorage } from 'js-common-library'
 import { message } from 'antd'
 import Layout from './layout'
 import { Suspense, useEffect } from 'react'
@@ -15,10 +15,10 @@ function Fallback() {
 }
 
 http.setConfig({
+  baseURL: 'https://qa01web-gateway.lingxichuxing.com',
   headers: {
     contextId: 'dss',
-    'skio-token':
-      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJib3NzX2F1dGhfaXNzdWVyIiwiY29udGV4dElkIjoiZHNzIiwiZXhwIjoxNjQ1NzM0MDMxLCJ1c2VySWQiOjcxMn0.7zLmSITJAFRbPv4GH5arHgzUFbRM3UAneFaI6B_gTY4',
+    'skio-token': getStorage('skio-token'),
   },
   transformResult(res) {
     const { code, data, msg } = res || {}

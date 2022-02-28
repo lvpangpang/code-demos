@@ -1,8 +1,9 @@
 import { createContext } from "react";
-const AppProviderCtx = createContext({
+
+export const AppCtx = createContext({
   selectTypes: [],
 });
 
 export default function AppProvider({ value, children }) {
-  return <AppProviderCtx.Provider value={value}>{children}</AppProviderCtx.Provider>;
+  return <AppCtx.Provider value={value}>{children}</AppCtx.Provider>;
 }

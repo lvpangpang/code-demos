@@ -1,12 +1,13 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
-
-const Home = React.lazy(() => import('../pages/home'))
+import RouterMap from './routerMap'
 
 export default function Index() {
   return (
     <Switch>
-      <Route exact path="/order-center/manage/order-list" component={Home} />
+      {RouterMap.map((item) => (
+        <Route key={item.path} exact path={item.path} component={item.component}></Route>
+      ))}
     </Switch>
   )
 }

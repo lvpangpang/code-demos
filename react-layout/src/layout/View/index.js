@@ -1,19 +1,19 @@
-import { uesContext } from 'react'
+import { useContext } from 'react'
 import { Breadcrumb } from 'antd'
-import { AppLayoutCtx } from '../AppLayout/layoutContext'
+import { AppLayoutCtx } from '../AppLayout/context'
+import './index.less'
 
 const { Item } = Breadcrumb
 
 function Index(props) {
-  const { children } = props
-  // const list = uesContext(AppLayoutCtx)
-  // console.log(list)
+  const { children, current = [] } = props
+  const list = useContext(AppLayoutCtx).concat(current)
   return (
-    <div>
-      <Breadcrumb>
-        <Item>订单中心</Item>
-        <Item>订单管理</Item>
-        <Item>订单列表</Item>
+    <div className="app-view">
+      <Breadcrumb className="app-view-breadcrumb">
+        {list?.map((item) => {
+          return <Item key={item?.id || item}>{item?.title || item}</Item>
+        })}
       </Breadcrumb>
       <div>{children}</div>
     </div>

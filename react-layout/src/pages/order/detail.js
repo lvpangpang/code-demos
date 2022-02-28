@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import View from '@/layout/View'
 
 function Index() {
-  return <View>首页</View>
+  return <View current={['详情']}>订单详情</View>
 }
 
 export default observer(Index)
