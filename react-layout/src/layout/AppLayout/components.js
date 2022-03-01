@@ -27,6 +27,7 @@ function findParent(menuConfig, pathname, list) {
   }
 }
 
+// 顶部导航栏
 export const TopNav = observer((props) => {
   const { menuConfig = [] } = props
   const { topId, setTopId, setSideNavMenu, setMenuConfig } = store
@@ -38,7 +39,7 @@ export const TopNav = observer((props) => {
       setTopId(id)
       setSideNavMenu(
         menuConfig.filter((item) => {
-          return item.id == id
+          return item.id === id - 0
         })[0]?.children || []
       )
     }
@@ -68,15 +69,13 @@ export const TopNav = observer((props) => {
   )
 })
 
-function loopSider(sideNavMenu) {
+function loopSider(sideNavMenu, history) {
   const { siderClick } = store
-  const history = useHistory()
-
   return sideNavMenu.map((item) => {
     if (item.children) {
       return (
-        <SubMenu openKeys={item.id} title={item.title} key={item.id}>
-          {loopSider(item.children)}
+        <SubMenu title={item.title} key={item.id}>
+          {loopSider(item.children, history)}
         </SubMenu>
       )
     }
@@ -93,6 +92,7 @@ function loopSider(sideNavMenu) {
   })
 }
 
+// 侧边导航栏
 export const SiderNav = observer(() => {
   const { siderId, sideNavMenu, siderClick, openIdList, setOpenIdList } = store
   const { pathname } = useLocation()
@@ -114,28 +114,29 @@ export const SiderNav = observer(() => {
     <Menu
       mode="inline"
       onOpenChange={setOpenIdList}
-      openkeys={openIdList}
+      openKeys={openIdList}
       selectedKeys={[siderId + '']}
     >
-      {loopSider(sideNavMenu)}
+      {loopSider(sideNavMenu, history)}
     </Menu>
   )
 })
 
+// 中心内容
 export const Center = (props) => {
   const { children } = props
   const { menuConfig } = store
   const { pathname } = useLocation()
 
   const list = findParent(menuConfig, pathname)
-  const res = []
+  const breadcrumb = []
   if (list) {
     list.forEach((item) => {
-      res.push(item)
+      breadcrumb.push(item)
     })
   }
   return (
-    <AppLayoutProvider value={res}>
+    <AppLayoutProvider value={breadcrumb}>
       <div className="content-center">{children}</div>
     </AppLayoutProvider>
   )

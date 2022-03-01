@@ -1,7 +1,6 @@
-import { useContext } from 'react'
-import { AppCtx } from '../layout/App/context'
+import { useAppInfo } from '../layout/App'
 
 export function getAuthTypes(authName) {
-  const authTypes = (useContext(AppCtx) || {}).authTypes || []
+  const authTypes = useAppInfo()?.userInfo?.permissions || []
   return !!authTypes?.filter((item) => item.permissionName === authName)[0]
 }

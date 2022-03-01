@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { isFun } from 'js-common-library'
 import Loading from './Loading'
-import AppProvider from './context'
+import AppProvider, { useAppInfo } from './context'
 
 function App(props) {
   const { id, children, init, isLogin = () => true, provider = {} } = props
@@ -19,4 +19,5 @@ function App(props) {
   )
 }
 
+export { useAppInfo }
 export default App

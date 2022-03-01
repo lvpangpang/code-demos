@@ -1,29 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import { Route } from 'react-router-dom'
-import { useHistory } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Route, useLocation } from 'react-router-dom'
 import { http, getStorage } from 'js-common-library'
 
 import App from './App'
 import AppLayout from './AppLayout'
 import Router from '../router'
+import User from './User'
 
 const Login = React.lazy(() => import('../pages/login'))
 
 function Index() {
   const [data, setData] = useState({})
   const [base, setBase] = useState({})
-  const { location } = useHistory()
+  const { pathname } = useLocation()
 
   // 直接访问登录页面
-  if (location.pathname === '/login') {
+  if (pathname === '/login') {
     return <Route exact path="/login" component={Login} />
   }
 
-  const getPersion = async () => {
+  // 获取用户信息
+  const getUserInfo = async () => {
     try {
-      const data = await http.get(
-        '/saas/v1/user/current_user_permission'
-      )
+      const data = await http.get('/saas/v1/user/current_user_permission')
       setData(data || {})
     } catch (err) {
       setData({
@@ -32,37 +31,28 @@ function Index() {
     }
   }
 
-  const getBase = async () => {
-    try {
-      const data = await http.get('/saas/v1/basic/dataTypes')
-      setBase(data || {})
-    } catch (err) {
-      setData({
-        id: 1,
-      })
-    }
+  // 获取下拉框数据
+  const getSelectTypes = async () => {
+    const data = await http.get('/saas/v1/basic/dataTypes')
+    setBase(data || {})
   }
 
   const init = () => {
-    getPersion()
-    getBase()
+    getUserInfo()
+    getSelectTypes()
   }
-
-  useEffect(() => {
-    init()
-  }, [])
 
   return (
     <App
       id={data.id}
       provider={{
         selectTypes: base,
-        authTypes: data.permissions,
+        userInfo: data,
       }}
-      // init={init}
+      init={init}
       isLogin={() => !!getStorage('skio-token')}
     >
-      <AppLayout menuConfig={data?.menus}>
+      <AppLayout menuConfig={data?.menus} extra={<User></User>} logo={'管理系统'}>
         <Router></Router>
       </AppLayout>
     </App>

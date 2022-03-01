@@ -1,7 +1,6 @@
-import { useContext } from 'react'
-import { AppCtx } from '../layout/App/context'
+import { useAppInfo } from '../layout/App'
 
 export function getSelectTypes(typeName) {
-  const selectTypes = (useContext(AppCtx) || {}).selectTypes
+  const selectTypes = useAppInfo()?.selectTypes || {}
   return selectTypes[typeName] || []
 }

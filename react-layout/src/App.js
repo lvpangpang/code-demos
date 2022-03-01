@@ -28,7 +28,9 @@ http.setConfig({
     message.error(msg)
     // 登录过期处理
     if (code === 5001) {
-      window.location.href = '/login'
+      setTimeout(() => {
+        window.location.href = '/login'
+      }, 1000)
     }
     return Promise.reject(res) // 暴露错误给业务代码的错误信息
   },
