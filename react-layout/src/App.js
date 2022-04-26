@@ -14,10 +14,13 @@ function Fallback() {
   return null
 }
 
+// __ENV__可以获取启动项目时在命令行输入的参数集合
+const baseURL = `https://${!__ENV__.env ? '' : __ENV__.env}web-gateway.lingxichuxing.com`
+
 http.setConfig({
-  baseURL: 'https://qa01web-gateway.lingxichuxing.com',
+  baseURL,
   headers: {
-    contextId: 'dss',
+    contextId: 'pms',
     'skio-token': getStorage('skio-token'),
   },
   transformResult(res) {

@@ -1,0 +1,53 @@
+.index {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  background: url('https://static-venus.shandiantech.com/skio/20210806/1628237690633_login-bg.png');
+  background-size: cover;
+}
+.login_wrap {
+  width: 380px;
+  margin-top: 180px;
+  .title {
+    font-size: 33px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.85);
+    text-align: center;
+  }
+  .sub_title {
+    text-align: center;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.45);
+    margin-top: 16px;
+  }
+  .tip {
+    margin-top: 40px;
+    font-size: 16px;
+    color: #1890ff;
+    text-align: center;
+    position: relative;
+    &::after {
+      position: absolute;
+      content: '';
+      width: 136px;
+      height: 2px;
+      background: #1890ff;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+  .form {
+    margin-top: 32px;
+    .code_but {
+      display: block;
+      width: 100%;
+    }
+  }
+}
+.footer {
+  position: fixed;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 12px;
+  bottom: 30px;
+}
