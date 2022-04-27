@@ -1,13 +1,11 @@
-import React from 'react'
 import { Button } from 'antd'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
-import View from '@/layout/View'
-import { getSelectTypes, getAuthTypes } from '../../tools'
+import { View } from 'antd-mobx-components'
+import { getSelectTypes } from '@/tools'
 
 function Index() {
   console.log(getSelectTypes('brand'))
-  console.log(getAuthTypes('orderList'))
   return (
     <View>
       <p>首页</p>

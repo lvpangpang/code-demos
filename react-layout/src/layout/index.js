@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { Route, useLocation } from 'react-router-dom'
 import { http, getStorage } from 'js-common-library'
+import { App, AppLayout } from 'antd-mobx-components'
+/* import { App } from 'antd-mobx-components'
+import AppLayout from './AppLayout' */
 
-import App from './App'
-import AppLayout from './AppLayout'
 import Router from '../router'
 import User from './User'
 
@@ -52,7 +53,7 @@ function Index() {
       init={init}
       isLogin={() => !!getStorage('skio-token')}
     >
-      <AppLayout menuConfig={data?.menus} extra={<User></User>} logo={'管理系统'}>
+      <AppLayout menuConfig={data?.menus} logo={'管理系统'}>
         <Router></Router>
       </AppLayout>
     </App>

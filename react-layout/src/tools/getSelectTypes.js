@@ -1,4 +1,4 @@
-import { useAppInfo } from '../layout/App'
+import { useAppInfo } from 'antd-mobx-components'
 
 export function getSelectTypes(typeName) {
   const selectTypes = useAppInfo()?.selectTypes || {}

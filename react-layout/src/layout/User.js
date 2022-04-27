@@ -1,12 +1,16 @@
-import { useAppInfo } from './App'
+import { App } from 'antd-mobx-components'
 import { useState } from 'react'
 import { Popover, Typography, Button } from 'antd'
 import './user.less'
 
 const { Paragraph } = Typography
 
+console.log(App)
+const { useAppInfo } = App
+
 function Index() {
   const [visible, setVisible] = useState(false)
+  console.log(useAppInfo())
   const { username, roleNameDisplays, phone, userTypeShow, operationEntities } = useAppInfo().userInfo
   return (
     <Popover

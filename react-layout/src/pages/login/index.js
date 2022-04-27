@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import { Input, Statistic, Icon, Row, Col, Form} from 'antd'
+import { Input, Statistic, Icon, Row, Col, Form } from 'antd'
 import { setStorage } from 'js-common-library'
 import { Button } from 'antd-mobx-components'
 
@@ -12,9 +11,7 @@ const { Item } = Form
 const { Countdown } = Statistic
 
 function Index() {
-  const history = useHistory()
   const [$form] = Form.useForm()
-  const [loading, setLoading] = useState(false)
   const [deadline, setDeadline] = useState(null)
   const [countdownVisible, setCountdownVisible] = useState(false)
 
@@ -39,15 +36,10 @@ function Index() {
 
   // 登录
   const login = async () => {
-    try {
-      setLoading(true)
-      const data = await $form.validateFields()
-      const { token } = await Api.login(data)
-      setStorage('skio-token', token)
-      history.push('/')
-    } finally {
-      setLoading(false)
-    }
+    const data = await $form.validateFields()
+    const { token } = await Api.login(data)
+    setStorage('skio-token', token)
+    window.location.href = '/'
   }
 
   return (
