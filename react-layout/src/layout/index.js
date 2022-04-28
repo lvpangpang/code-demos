@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import { Route, useLocation } from 'react-router-dom'
 import { http, getStorage } from 'js-common-library'
 import { App, AppLayout } from 'antd-mobx-components'
-/* import { App } from 'antd-mobx-components'
-import AppLayout from './AppLayout' */
 
 import Router from '../router'
 import User from './User'
@@ -20,16 +18,10 @@ function Index() {
     return <Route exact path="/login" component={Login} />
   }
 
-  // 获取用户信息
+  // 获取用户信息， 菜单
   const getUserInfo = async () => {
-    try {
-      const data = await http.get('/saas/v1/user/current_user_permission')
-      setData(data || {})
-    } catch (err) {
-      setData({
-        id: 1,
-      })
-    }
+    const data = await http.get('/saas/v1/user/current_user_permission')
+    setData(data || {})
   }
 
   // 获取下拉框数据
@@ -53,7 +45,7 @@ function Index() {
       init={init}
       isLogin={() => !!getStorage('skio-token')}
     >
-      <AppLayout menuConfig={data?.menus} logo={'管理系统'}>
+      <AppLayout menuConfig={data?.menus} logo={'管理系统'} extra={<User></User>}>
         <Router></Router>
       </AppLayout>
     </App>

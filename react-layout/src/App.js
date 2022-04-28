@@ -1,18 +1,20 @@
+import { Suspense, useEffect } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { http, getStorage } from 'js-common-library'
-import { message } from 'antd'
-import Layout from './layout'
-import { Suspense, useEffect } from 'react'
+import { message, ConfigProvider } from 'antd'
+import zhCN from 'antd/lib/locale/zh_CN'
+import moment from 'moment'
+import 'moment/locale/zh-cn'
+import { configure } from 'mobx'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
-function Fallback() {
-  useEffect(() => {
-    NProgress.start()
-    return NProgress.done
-  }, [])
-  return null
-}
+import Layout from './layout'
+
+configure({
+  enforceActions: 'never',
+})
+moment.locale('en')
 
 // __ENV__可以获取启动项目时在命令行输入的参数集合
 const baseURL = `https://${!__ENV__.env ? '' : __ENV__.env}web-gateway.lingxichuxing.com`
@@ -42,12 +44,22 @@ http.setConfig({
   },
 })
 
+function Fallback() {
+  useEffect(() => {
+    NProgress.start()
+    return NProgress.done
+  }, [])
+  return null
+}
+
 function Index() {
   return (
     <BrowserRouter>
-      <Suspense fallback={<Fallback />}>
-        <Layout></Layout>
-      </Suspense>
+      <ConfigProvider locale={zhCN}>
+        <Suspense fallback={<Fallback />}>
+          <Layout></Layout>
+        </Suspense>
+      </ConfigProvider>
     </BrowserRouter>
   )
 }

@@ -1,16 +1,13 @@
-import { App } from 'antd-mobx-components'
+import { useAppInfo, Button } from 'antd-mobx-components'
 import { useState } from 'react'
-import { Popover, Typography, Button } from 'antd'
-import './user.less'
+import { Popover, Typography } from 'antd'
+import style from './user.less'
+import { loginOut } from '@/tools'
 
 const { Paragraph } = Typography
 
-console.log(App)
-const { useAppInfo } = App
-
 function Index() {
   const [visible, setVisible] = useState(false)
-  console.log(useAppInfo())
   const { username, roleNameDisplays, phone, userTypeShow, operationEntities } = useAppInfo().userInfo
   return (
     <Popover
@@ -19,8 +16,8 @@ function Index() {
       trigger="click"
       onVisibleChange={(v) => setVisible(v)}
       content={
-        <div className="info">
-          <header className="type">{userTypeShow && <span>{userTypeShow}</span>}</header>
+        <div className={style.info}>
+          <header className={style.type}>{userTypeShow && <span>{userTypeShow}</span>}</header>
           <div>
             <span>运营主体：</span>
             <span>
@@ -37,13 +34,13 @@ function Index() {
             <span>角色：</span>
             <span>{roleNameDisplays?.join('、')}</span>
           </div>
-          <Button type="primary" block>
+          <Button type="primary" block onClick={loginOut}>
             退出
           </Button>
         </div>
       }
     >
-      <span className="user">{username}</span>
+      <span className={style.user}>{username}</span>
     </Popover>
   )
 }
