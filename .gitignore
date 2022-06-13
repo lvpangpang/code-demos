@@ -1,6 +1,3 @@
 node_modules
 dist
 .admin
-yarn.lock
-package-lock.json
-yarn-error.log
