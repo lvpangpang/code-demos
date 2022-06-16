@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>test-axios2</title>
+  </head>
+  <body>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.js"></script>
+    <script>
+      const instance = axios.create();
+      // 添加响应拦截器
+      instance.interceptors.response.use(
+        function (result) {
+          const { data } = result;
+          const { code, msg } = data;
+          if (code === 200) {
+            return data.data;
+          }
+          if (code === 401) {
+            window.location.href = "/login";
+          }
+          alert(msg);
+          return Promise.reject(data); // 这里的错误直接传递到业务错误
+        },
+        function (error) {
+          const { message } = error;
+          if (message) {
+            alert(message);
+          } else {
+            alert("服务端错误");
+          }
+          console.log("配置错误数据", error);
+          return Promise.reject(error); // 一定写return，否则会到业务代码里面的then(这句代码没有也会到下一个then)
+        }
+      );
+      function http(props) {
+        const { method, url } = props;
+        return instance({
+          method: method || "get",
+          url,
+          headers: {
+            "skio-token":
+              "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJib3NzX2F1dGhfaXNzdWVyIiwiY29udGV4dElkIjoiZHNzIiwiZXhwIjoxNjU1Mzg3NzE2LCJ1c2VySWQiOjcxMn0.XlC4Fgbm8MiLzfhNStG2AMHQyAqiNMOVoEXjb3Y6cfw",
+            contextid: "dss",
+          },
+        });
+      }
+
+      async function send() {
+        try {
+          const data = await http({
+            url: "https://qa01web-gateway.lingxichuxing.com/saas/v1/basic/dataTypes",
+          });
+          console.log("业务正常数据", data);
+        } catch (err) {
+          console.log("业务错误数据", err);
+        }
+      }
+
+      send();
+    </script>
+  </body>
+</html>
