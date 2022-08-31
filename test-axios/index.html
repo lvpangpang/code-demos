@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>test-axios</title>
+  </head>
+  <body>
+    <button onclick="cancelFetch()">请求</button>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.27.2/axios.min.js"></script>
+    <script>
+      // get请求去null, ''
+      function optimizeParams(params) {
+        const list = [];
+        Object.keys(params || {}).forEach((key) => {
+          if (params[key] === "" || params[key] === null) {
+            return;
+          }
+          list.push(`${key}=${encodeURIComponent(params[key])}`);
+        });
+        return list.join("&");
+      }
+
+      const http = axios.create({
+        timeout: 1000,
+        baseURL: "https://qa01web-gateway.lingxichuxing.com",
+        headers: {
+          "skio-token":
+            "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJib3NzX2F1dGhfaXNzdWVyIiwiY29udGV4dElkIjoiZHNzIiwiZXhwIjoxNjYxOTUzOTgxLCJ1c2VySWQiOjcxMn0.KDN8lO15O0KkgN2j0F68oG4QCZQvvhu8nt-fb06nQ0s",
+          contextid: "dss",
+        },
+        paramsSerializer: optimizeParams,
+      });
+      // 添加请求拦截器
+      http.interceptors.request.use(
+        function (config) {
+          return config;
+        },
+        function (error) {
+          // 对请求错误做些什么
+          return Promise.reject(error);
+        },
+        false
+      );
+      // 添加响应拦截器
+      http.interceptors.response.use(
+        function (response) {
+          const { code, data, msg } = response.data || {};
+          if (code === 200) {
+            return data;
+          }
+          alert(msg);
+          return Promise.reject(response.data); // 被业务catch捕获
+        },
+        function (error) {
+          if (error.message.includes("timeout")) {
+            alert("网络超时");
+          } else {
+            // alert("服务端异常");
+          }
+          // 业务异常可以捕获到(这句一定要加，否则走业务正常逻辑)
+          return Promise.reject(error); // 被业务catch捕获
+        }
+      );
+
+      /* 正常请求demo */
+      http
+        .get("saas/v1/basic/dataTypes")
+        .then((data) => {
+          console.log("业务正常");
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log("业务异常");
+          console.log(error);
+        });
+
+      /* 取消请求demo */
+      let cancel = null;
+      function cancelFetch() {
+        if (cancel !== null) {
+          cancel(); // 取消请求
+        }
+        http
+          .get("saas/v1/basic/dataTypes", {
+            /* 
+              背后帮我们订阅了onCanceled函数执行下面的代码
+              request.abort();
+              request = null;
+            */
+            cancelToken: new axios.CancelToken(function (c) {
+              console.log(c);
+              cancel = c;
+            }),
+          })
+          .then((data) => {
+            console.log("业务正常");
+            console.log(data);
+          })
+          .catch((error) => {
+            console.log("业务异常");
+            console.log(error);
+          });
+      }
+    </script>
+  </body>
+</html>
