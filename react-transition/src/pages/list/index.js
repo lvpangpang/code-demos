@@ -1,35 +1,20 @@
 import React from 'react'
-import { Button } from 'antd-mobile'
-import { observer } from 'mobx-react-lite'
+import { Link } from 'react-router-dom'
 import styles from './index.less'
-import { useParams } from 'react-router-dom'
 
 function Index(props) {
-  console.log(props)
-  console.log(useParams())
+  const { history } = props
   return (
     <div className={styles.about_box}>
       <h1>列表</h1>
+      <span onClick={() => {
+        history.goBack()
 
-      <Button
-        type="primary"
-        onClick={() => {
-          props.history.goBack()
-        }}
-      >
-        回到首页
-      </Button>
-      <br />
-      <Button
-        type="primary"
-        onClick={() => {
-          props.history.push('/detail')
-        }}
-      >
-        跳转详情
-      </Button>
+      }}>回首页</span>
+      <br/>
+      <Link to="/detail">去详情</Link>
     </div>
   )
 }
 
-export default observer(Index)
+export default Index

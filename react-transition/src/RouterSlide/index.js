@@ -15,6 +15,7 @@ const Index = withRouter(({ location, history, children }) => (
       React.cloneElement(child, { classNames: ANIMATION_MAP[history.action] })
     }
   >
+    {console.log(history.action)}
     <CSSTransition appear timeout={500} key={location.pathname + location.search}>
       <Switch location={location}>{children}</Switch>
     </CSSTransition>

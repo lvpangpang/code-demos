@@ -22,6 +22,7 @@
         return list.join("&");
       }
 
+      // 实例化axios
       const http = axios.create({
         timeout: 1000,
         baseURL: "https://qa01web-gateway.lingxichuxing.com",
@@ -32,6 +33,7 @@
         },
         paramsSerializer: optimizeParams,
       });
+
       // 添加请求拦截器
       http.interceptors.request.use(
         function (config) {
@@ -43,6 +45,7 @@
         },
         false
       );
+      
       // 添加响应拦截器
       http.interceptors.response.use(
         function (response) {
