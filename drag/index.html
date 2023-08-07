@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Test-Drag</title>
+    <style>
+      body {
+        background: #eee;
+      }
+
+      .droppable {
+        display: inline-block;
+        width: 160px;
+        height: 160px;
+        margin: 10px;
+        border: 3px salmon solid;
+        background-color: #fff;
+        margin: 20px;
+      }
+
+      .box {
+        width: 150px;
+        height: 150px;
+        background-image: url('./1.jpg');
+        background-size: 150px 150px;
+      }
+
+      .drag-over {
+        border-style: dashed;
+      }
+
+      .dragging {
+        background-color: yellow;
+      }
+
+      .invisible {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="droppable" src-index="0">
+      <div draggable="true" class="box"></div>
+    </div>
+    <div class="droppable" src-index="1"></div>
+    <div class="droppable" src-index="2"></div>
+    <div class="droppable" src-index="3"></div>
+    <div class="droppable" src-index="4"></div>
+    <div class="droppable" src-index="5"></div>
+
+    <script>
+      const dragElem = document.querySelector('.box');
+      const droppables = document.querySelectorAll('.droppable');
+
+      const HtmlStringTransfer = function() {
+        this.secret = null;
+
+        this.setSecret = function() {
+          const _secret = Math.random().toString(36).substr(2);
+          this.secret = _secret;
+        }
+
+        this.getString = function(HTMLNode) {
+          this.setSecret();
+          HTMLNode.setAttribute('id', this.secret);
+          return HTMLNode.outerHTML;
+        };
+
+        this.getNode = function() {
+          const _node = document.getElementById(this.secret);
+          _node.removeAttribute('id');
+
+          return _node;
+        };
+      };
+
+      const Factory = new HtmlStringTransfer();
+
+      dragElem.addEventListener('drag', function(event) {
+        console.log('-------------Drag Event--------------');
+      });
+
+      dragElem.addEventListener('dragstart', function(event) {
+        console.log('-------------Drag Start Event--------------');
+
+        const _sourceElement = Factory.getString(event.target);
+
+        event.dataTransfer.setData('sourceElement', _sourceElement);
+        setTimeout(() => {
+          this.classList.add('invisible');
+        }, 0);
+      });
+
+      dragElem.addEventListener('dragend', function() {
+        console.log('-------------Drag End Event--------------');
+        setTimeout(() => {
+          this.classList.remove('invisible');
+        }, 0);
+      });
+
+      droppables.forEach((elem, index) => {
+        elem.addEventListener('dragenter', function(event) {
+          // 如果不调用event.preventDefault，导致drop事件失效
+          event.preventDefault();
+          console.log(`Droppable ${index} dropover event`);
+        });
+
+        elem.addEventListener('dragover', function(event) {
+          // dropover事件的默认处理函数会使得drop事件不被捕获
+          event.preventDefault();
+          console.log(`Droppable ${index} dropover event`);
+          this.classList.add('drag-over');
+        });
+
+        elem.addEventListener('dragleave', function(event) {
+          event.preventDefault();
+          console.log(`Dragleave ${index} dropover event`);
+          this.classList.remove('drag-over');
+        });
+
+        elem.addEventListener('drop', function(event) {
+          console.log(`Drop in ${index}`);
+          const sourceElement = event.dataTransfer.getData('SourceElement');
+          const _sourceElement = Factory.getNode(sourceElement);
+
+          setTimeout(() => {
+            this.append(_sourceElement);
+            dragElem.classList.remove('invisible');
+            this.classList.remove('drag-over');
+          }, 0);
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test-Drag1</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .drop-box {
+      position: absolute;
+      left: 0;
+      top: 200px;
+      width: 500px;
+      height: 500px;
+      border: 2px solid #000;
+    }
+  </style>
+</head>
+<body>
+  <div id="drag">
+    <img src="./1.jpg" draggable="true" />
+  </div>
+  <div id="drop" class="drop-box"></div>
+  <script>
+    const drag = document.querySelector('#drag')
+    const drop = document.querySelector('#drop')
+    drag.addEventListener('dragstart', function(e) {
+      e.dataTransfer.setData('num', 1)
+    })
+    drop.addEventListener('dragover', function(e) {
+      e.preventDefault()
+    })
+    drop.addEventListener('drop', function(e) {
+      console.log(e.dataTransfer.getData('num'))
+      this.appendChild(drag)
+    }, false)
+  </script>
+</body>
+</html>
